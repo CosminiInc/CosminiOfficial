@@ -13,10 +13,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Set up JDK 11
-      uses: actions/setup-java@v1
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
       with:
-        java-version: 1.11
+        java-version: 17
         
     - uses: actions/checkout@v3
       with: 
@@ -26,6 +26,29 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
+
+    - uses: actions/checkout@v3 #Just added
+      with:
+        fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+    - name: Cache SonarCloud packages
+      uses: actions/cache@v3
+      with:
+        path: ~\sonar\cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+    - name: Cache SonarCloud scanner
+      id: cache-sonar-scanner
+      uses: actions/cache@v3
+      with:
+        path: .\.sonar\scanner
+        key: ${{ runner.os }}-sonar-scanner
+        restore-keys: ${{ runner.os }}-sonar-scanner
+    - name: Install SonarCloud scanner
+      if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+      shell: powershell
+      run: |
+        New-Item -Path .\.sonar\scanner -ItemType Directory
+        dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
         
     - name: Restore dependencies
       run: dotnet restore Cosminis/ComsiniAPI
@@ -40,5 +63,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: powershell
-      run:  dotnet build --no-restore Cosminis/ComsiniAPI
+      run:  |
+        .\.sonar\scanner\dotnet-sonarscanner begin /k:"CosminiInc_CosminiOfficial" /o:"cosminiinc" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+        dotnet build
+        .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        dotnet build --no-restore Cosminis/ComsiniAPI
 
