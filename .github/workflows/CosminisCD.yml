@@ -59,7 +59,7 @@ jobs:
         run: |
           cd Cosminis/AngularCosminis
           npm ci
-          npm run build -- --prod
+          npm run build --prod
 
       - name: Copy Angular dist to .NET wwwroot
         run: mkdir -p Cosminis/CosminiAPI/wwwroot && cp -R Cosminis/AngularCosminis/dist/angular-cosminis/* Cosminis/CosminiAPI/wwwroot/
