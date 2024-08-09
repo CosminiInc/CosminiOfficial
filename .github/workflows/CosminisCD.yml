@@ -58,7 +58,7 @@ jobs:
       - name: Build Angular app
         run: |
           cd Cosminis/AngularCosminis
-          npm ci  # This is preferred over npm install in CI environments
+          npm ci
           npm run build -- --prod
 
       - name: Copy Angular dist to .NET wwwroot
