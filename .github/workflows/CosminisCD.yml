@@ -56,7 +56,7 @@ jobs:
         run: |
           cd Cosminis/AngularCosminis
           npm ci
-          npm run build -- --prod
+          npm run build:prod
 
       - name: Copy Angular dist to .NET publish folder
         run: cp -R Cosminis/AngularCosminis/dist/angular-cosminis/* ${{env.DOTNET_ROOT}}/myapp/wwwroot/
