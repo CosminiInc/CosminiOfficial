@@ -27,16 +27,14 @@ builder.Configuration.AddUserSecrets<Program>();
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddDbContext<CosminisOfficialDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CosminiDBConnectionString")));
 
-var connectionString = builder.Configuration.GetConnectionString("CosminiDBConnectionString");
+/*var connectionString = builder.Configuration.GetConnectionString("CosminiDBConnectionString");
 
-// Set up dependency injection
 var serviceProvider = new ServiceCollection()
     .AddLogging(configure => configure.AddConsole())
     .BuildServiceProvider();
 
-// Resolve services
 var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
-logger.LogInformation($"ConnectionString from Azure App Service: {connectionString}");
+logger.LogInformation($"ConnectionString from Azure App Service: {connectionString}");*/
 
 builder.Services.AddScoped<ICompanionDAO, CompanionRepo>();
 builder.Services.AddScoped<IFriendsDAO, FriendsRepo>();
