@@ -6,9 +6,13 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Controllers;
+using Azure.Identity;
 //Is this not pushing to master?
 
 var builder = WebApplication.CreateBuilder(args);
+
+var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VSCosminiDBConnectionString"));
+builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
 
 builder.Services.AddCors(options =>
 {
