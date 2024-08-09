@@ -13,9 +13,9 @@ permissions:
 env:
   AZURE_WEBAPP_NAME: Cosminis
   AZURE_WEBAPP_PACKAGE_PATH: ComsiniAPI\publish
-  CONFIGURATION: Release
+  CONFIGURATION: Production
   DOTNET_CORE_VERSION: 6.0.x
-  WORKING_DIRECTORY: ComsiniAPI
+  WORKING_DIRECTORY: Cosminis/ComsiniAPI
 
 jobs:
   build:
